@@ -1,6 +1,8 @@
 version: '2'
 
+
 services:
+  elasticsearch:
     image: elasticsearch:alpine
     ports:
       - "9200"
@@ -19,12 +21,12 @@ services:
       - "5044:5044"   # beats
       - "5045:5045"   # json
 
-networks:
+    networks:
       - werfty_tiktak
     depends_on:
       - elasticsearch
   kibana:
-    image: logstash:alpine
+    image: kibana:latest
     volumes:
       - ./volumes/kibana/config/:/etc/kibana/
     ports:
@@ -41,7 +43,7 @@ networks:
     ports:
       - "443"
       # - "80" unsecure access disabled by default
-networks:
+    networks:
       - werfty_tiktak
     depends_on:
       - kibana
@@ -49,4 +51,4 @@ networks:
 
 networks:
   werfty_tiktak:
-driver: bridge
+    driver: bridge
