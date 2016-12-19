@@ -23,8 +23,8 @@ services:
 
     networks:
       - werfty_tiktak
-    depends_on:
-      - elasticsearch
+    #depends_on:
+    #  - elasticsearch
   kibana:
     image: kibana:latest
     volumes:
@@ -35,6 +35,10 @@ services:
       - werfty_tiktak
     depends_on:
       - elasticsearch
+    environment:
+      - ES_JAVA_OPTS="-Des.path.conf=/etc/elasticsearch"
+    command: "-E network.host=0.0.0.0 -E discovery.zen.minimum_master_nodes=1"
+
 
   proxy:
     image: nginx:mainline-alpine
