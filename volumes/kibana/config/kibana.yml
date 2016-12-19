@@ -1,0 +1,10 @@
+server.port: 5601
+elasticsearch.url: "http://elasticsearch:9200"
+
+# accessed via tls proxy. needed for standalone kibana SSL/TLS
+# server.ssl.cert: /path/to/your/server.crt
+# server.ssl.key: /path/to/your/server.key
+
+# if needed, client certificate
+# elasticsearch.ssl.cert: /path/to/your/client.crt
+# elasticsearch.ssl.key: /path/to/your/client.key
