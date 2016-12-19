@@ -5,8 +5,8 @@ services:
   elasticsearch:
     image: elasticsearch:alpine
     ports:
-      - "9200"
-      - "9300"
+      - "9200:9200"
+      - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
     networks:
@@ -30,14 +30,14 @@ services:
     volumes:
       - ./volumes/kibana/config/:/etc/kibana/
     ports:
-      - "5601"
+      - "80:5601"
     networks:
       - werfty_tiktak
     depends_on:
       - elasticsearch
     environment:
       - ES_JAVA_OPTS="-Des.path.conf=/etc/elasticsearch"
-    command: "-E network.host=0.0.0.0 -E discovery.zen.minimum_master_nodes=1"
+    command: "-e network.host=0.0.0.0 -e discovery.zen.minimum_master_nodes=1 winner"
 
 
   proxy:
