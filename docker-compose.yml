@@ -1,58 +1,39 @@
 version: '2'
 
-
 services:
   elasticsearch:
-    image: elasticsearch:alpine
+    image: elasticsearch:latest
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9200"
+      - "9300"
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
     networks:
-      - werfty_tiktak
+      - tiktak_elk
   logstash:
-    image: logstash:alpine
+    image: logstash:latest
     command: -f /etc/logstash/conf.d/
     volumes:
       - ./volumes/logstash/config:/etc/logstash/conf.d
     ports:
-      - "5000:5000"   # logstash/graylog
-      - "5044:5044"   # beats
-      - "5045:5045"   # json
-
+      - "5000:5000"
+      - "5044:5044"
+      - "5045:5045"
     networks:
-      - werfty_tiktak
-    #depends_on:
-    #  - elasticsearch
+      - tiktak_elk
+    depends_on:
+      - elasticsearch
   kibana:
     image: kibana:latest
     volumes:
       - ./volumes/kibana/config/:/etc/kibana/
     ports:
-      - "80:5601"
+      - "5601:5601"
     networks:
-      - werfty_tiktak
+      - tiktak_elk
     depends_on:
       - elasticsearch
-    environment:
-      - ES_JAVA_OPTS="-Des.path.conf=/etc/elasticsearch"
-    command: "-e network.host=0.0.0.0 -e discovery.zen.minimum_master_nodes=1 winner"
-
-
-  proxy:
-    image: nginx:mainline-alpine
-    volumes:
-      - ./volumes/nginx/config/:/etc/nginx/
-    ports:
-      - "443"
-      # - "80" unsecure access disabled by default
-    networks:
-      - werfty_tiktak
-    depends_on:
-      - kibana
-
 
 networks:
-  werfty_tiktak:
+  tiktak_elk:
     driver: bridge
